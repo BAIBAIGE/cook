@@ -14,31 +14,34 @@ jobs:
           fetch-depth: 0
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
 
       # after pnpm
       - name: Use Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 24
           registry-url: https://registry.npmjs.org/
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm build
 
+      - name: Include EdgeOne Pages configuration
+        run: cp edgeone.json dist/edgeone.json
+
       # deploy to edgeone
       # see https://edgeone.ai/zh/document/180255338996572160?product=edgedeveloperplatform
       - name: Deploy to EdgeOne Pages
-        run: npx edgeone pages deploy dist -n cook-yunyoujun-cn -t ${{ secrets.EDGEONE_API_TOKEN }}
+        run: pnpm dlx edgeone@1.6.23 makers deploy dist -n cook-yunyoujun-cn -e production -a global -t ${{ secrets.EDGEONE_API_TOKEN }}
         env:
           EDGEONE_API_TOKEN: ${{ secrets.EDGEONE_API_TOKEN }}
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: dist
