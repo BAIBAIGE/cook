@@ -80,6 +80,7 @@ interface CloudbaseModule {
 }
 
 export interface NativeYunlefunAuthorizationAdapter extends YunlefunAuthorizationAdapter {
+  cancel: () => Promise<void>
   consumeUrl: (url: string) => Promise<YunlefunAuthorizationResult | null>
 }
 
@@ -115,6 +116,7 @@ export function createNativeYunlefunAuthorizationAdapter(
   }
 
   return {
+    cancel: async () => store.clear(),
     consumeInitial: async () => {
       const url = await initialUrl()
       return url ? consumeUrl(url) : null

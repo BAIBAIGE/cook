@@ -167,6 +167,7 @@ async function initializeOnce(
         return
       }
 
+      await nativeAdapter?.cancel().catch(() => undefined)
       await controller.handleAuthorization({
         ok: false,
         reason: 'access_denied',
