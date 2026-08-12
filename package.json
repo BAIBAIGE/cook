@@ -35,7 +35,7 @@
     "sync": "cap sync",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "nuxt typecheck",
+    "typecheck": "pnpm -C packages/cook run build && nuxt typecheck",
     "pack:skill": "tsx scripts/pack-skill.ts"
   },
   "dependencies": {
