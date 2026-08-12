@@ -7,6 +7,12 @@ const config: CapacitorConfig = {
   appName: 'cook',
   webDir: 'dist',
 
+  server: {
+    hostname: 'cook.yunyoujun.cn',
+    androidScheme: 'https',
+    iosScheme: 'https',
+  },
+
   plugins: {
     StatusBar: {
       overlaysWebView: false,

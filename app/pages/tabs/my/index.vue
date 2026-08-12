@@ -4,6 +4,26 @@ import { links } from '~/constants'
 definePageMeta({
   alias: ['/my'],
 })
+
+const {
+  account,
+  configurationMessage,
+  errorMessage,
+  isAuthenticated,
+  signIn,
+  signOut,
+  status,
+} = useYunlefunAuth()
+
+const authBusy = computed(() => status.value === 'checking' || status.value === 'signing-in')
+
+async function handleSignIn(): Promise<void> {
+  await signIn()
+}
+
+async function handleSignOut(): Promise<void> {
+  await signOut()
+}
 </script>
 
 <template>
@@ -15,7 +35,47 @@ definePageMeta({
     </ion-header>
 
     <ion-content>
-      <!-- TODO -->
+      <ion-list :inset="true">
+        <ion-item v-if="isAuthenticated && account">
+          <ion-avatar v-if="account.avatarUrl" slot="start">
+            <img :alt="account.displayName" :src="account.avatarUrl">
+          </ion-avatar>
+          <ion-icon v-else slot="start" :icon="ioniconsPersonCircleOutline" />
+          <ion-label>
+            <h2>{{ account.displayName }}</h2>
+            <p>云乐坊账号</p>
+          </ion-label>
+        </ion-item>
+        <ion-item
+          v-if="isAuthenticated"
+          :button="true"
+          :disabled="authBusy"
+          @click="handleSignOut"
+        >
+          <ion-icon slot="start" :icon="ioniconsLogOutOutline" />
+          <ion-label>退出登录</ion-label>
+        </ion-item>
+        <ion-item
+          v-else
+          :button="true"
+          :disabled="authBusy || Boolean(configurationMessage)"
+          @click="handleSignIn"
+        >
+          <ion-spinner v-if="authBusy" slot="start" name="crescent" />
+          <ion-icon v-else slot="start" :icon="ioniconsLogInOutline" />
+          <ion-label>
+            <h2>{{ authBusy ? '正在检查登录状态' : '使用云乐坊账号登录' }}</h2>
+            <p>安全授权，无需在 Cook 输入密码</p>
+          </ion-label>
+        </ion-item>
+        <ion-item v-if="configurationMessage || errorMessage" lines="none">
+          <ion-icon slot="start" color="danger" :icon="ioniconsAlertCircleOutline" />
+          <ion-label class="ion-text-wrap" color="danger">
+            {{ configurationMessage || errorMessage }}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+
       <ion-list :inset="true">
         <ion-item router-link="/recipes/history">
           <ion-icon slot="start" :icon="ioniconsTimeOutline" />
