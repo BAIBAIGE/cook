@@ -19,8 +19,19 @@ dist
 .output
 .nuxt
 .env
+.env.*
+!.env.example
+!.env.*.example
 .idea/
 .vercel
+
+# EdgeOne CLI local state and build artifacts
+.edgeone/
+
+# Apple signing secrets
+*.p12
+AuthKey_*.p8
+*.mobileprovision
 
 # CodeBuddy
 .codebuddy/memory
