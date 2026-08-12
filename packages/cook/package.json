@@ -43,16 +43,16 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@clack/prompts": "^1.2.0",
-    "@larksuiteoapi/node-sdk": "^1.60.0",
+    "@clack/prompts": "^1.7.0",
+    "@larksuiteoapi/node-sdk": "^1.73.0",
     "cac": "^7.0.0",
     "consola": "^3.4.2",
-    "papaparse": "^5.5.3"
+    "papaparse": "^5.5.4"
   },
   "devDependencies": {
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.9.5",
     "@types/papaparse": "^5.5.2",
-    "tsx": "^4.21.0",
+    "tsx": "^4.23.12",
     "unbuild": "^3.6.1"
   },
   "publishConfig": {

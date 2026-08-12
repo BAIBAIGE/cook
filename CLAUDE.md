@@ -85,4 +85,5 @@ See `.env.example`:
 
 ## Node/Package Manager
 
-- pnpm: 10.32.1 (enforced via `packageManager` field)
+- Node.js: 22 or newer
+- pnpm: 11.21.0 (enforced via `packageManager` field)

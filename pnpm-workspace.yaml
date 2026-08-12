@@ -1,14 +1,44 @@
+strictPeerDependencies: false
+autoInstallPeers: false
+ignoreWorkspaceRootCheck: true
+strictDepBuilds: true
+minimumReleaseAge: 1440
+shamefullyHoist: true
 shellEmulator: true
+blockExoticSubdeps: true
 
-# eslint-disable-next-line pnpm/yaml-enforce-settings
-trustPolicy: accept
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  # Babel still pins this established pre-provenance release.
+  - semver@6.3.1
+  # Google Workbox 7.4.1 pins this exact pre-release build helper.
+  - '@trickfilm400/rollup-plugin-off-main-thread@3.0.0-pre1'
+  # Official Ionic repository, maintainers, signature, and integrity verified.
+  - '@capacitor/haptics@8.0.2'
 
 packages:
   - docs
   - packages/*
 
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
-  - simple-git-hooks
-  - unrs-resolver
+overrides:
+  # Patched transitive versions for Ionic CLI security advisories.
+  '@ionic/cli>tar': 7.5.22
+  # @nuxtjs/ionic 1.0.2 has not refreshed its Capacitor dependency range yet.
+  '@nuxtjs/ionic>@capacitor/cli': 8.5.0
+  '@nuxtjs/ionic>@capacitor/core': 8.5.0
+  external-editor>tmp: 0.2.7
+  # Capacitor CLI's xcode helper only uses the stable uuid API.
+  xcode>uuid: 11.1.1
+
+peerDependencyRules:
+  # UnoCSS exposes an optional Webpack adapter; this project builds with Vite.
+  ignoreMissing:
+    - webpack
+
+allowBuilds:
+  '@parcel/watcher': true
+  core-js-pure: false
+  esbuild: true
+  protobufjs: false
+  simple-git-hooks: true
+  unrs-resolver: true

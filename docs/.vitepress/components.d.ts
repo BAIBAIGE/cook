@@ -12,8 +12,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    DocsProjectCard: typeof import('./../../node_modules/.pnpm/@yunyoujun+docs@0.1.14_vite@8.0.2_@types+node@25.5.0_esbuild@0.27.3_jiti@2.6.1_sass@1.9_5106adb2c90dd6d9af0814c7748a90ab/node_modules/@yunyoujun/docs/client/components/DocsProjectCard.vue')['default']
-    DocsProjectList: typeof import('./../../node_modules/.pnpm/@yunyoujun+docs@0.1.14_vite@8.0.2_@types+node@25.5.0_esbuild@0.27.3_jiti@2.6.1_sass@1.9_5106adb2c90dd6d9af0814c7748a90ab/node_modules/@yunyoujun/docs/client/components/DocsProjectList.vue')['default']
+    DocsProjectCard: typeof import('./../../node_modules/.pnpm/@yunyoujun+docs@0.1.14_vite@8.2.1_@types+node@25.9.5_esbuild@0.28.2_jiti@2.7.0_sass@1.1_36a5fa0507118b7279013ea35a3fd8ec/node_modules/@yunyoujun/docs/client/components/DocsProjectCard.vue')['default']
+    DocsProjectList: typeof import('./../../node_modules/.pnpm/@yunyoujun+docs@0.1.14_vite@8.2.1_@types+node@25.9.5_esbuild@0.28.2_jiti@2.7.0_sass@1.1_36a5fa0507118b7279013ea35a3fd8ec/node_modules/@yunyoujun/docs/client/components/DocsProjectList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
@@ -21,8 +21,8 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
-  const DocsProjectCard: typeof import('./../../node_modules/.pnpm/@yunyoujun+docs@0.1.14_vite@8.0.2_@types+node@25.5.0_esbuild@0.27.3_jiti@2.6.1_sass@1.9_5106adb2c90dd6d9af0814c7748a90ab/node_modules/@yunyoujun/docs/client/components/DocsProjectCard.vue')['default']
-  const DocsProjectList: typeof import('./../../node_modules/.pnpm/@yunyoujun+docs@0.1.14_vite@8.0.2_@types+node@25.5.0_esbuild@0.27.3_jiti@2.6.1_sass@1.9_5106adb2c90dd6d9af0814c7748a90ab/node_modules/@yunyoujun/docs/client/components/DocsProjectList.vue')['default']
+  const DocsProjectCard: typeof import('./../../node_modules/.pnpm/@yunyoujun+docs@0.1.14_vite@8.2.1_@types+node@25.9.5_esbuild@0.28.2_jiti@2.7.0_sass@1.1_36a5fa0507118b7279013ea35a3fd8ec/node_modules/@yunyoujun/docs/client/components/DocsProjectCard.vue')['default']
+  const DocsProjectList: typeof import('./../../node_modules/.pnpm/@yunyoujun+docs@0.1.14_vite@8.2.1_@types+node@25.9.5_esbuild@0.28.2_jiti@2.7.0_sass@1.1_36a5fa0507118b7279013ea35a3fd8ec/node_modules/@yunyoujun/docs/client/components/DocsProjectList.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
 }
