@@ -12,6 +12,7 @@ export interface YunlefunSsoConfigInput {
   nativeClientId?: string
   nativeRedirectUri?: string
   redirectUri?: string
+  redirectUris?: string | string[]
   scope?: string
   ssoOrigin?: string
 }
@@ -43,16 +44,17 @@ export function resolveYunlefunSsoConfig(
   )
   const cloudbaseEnv = normalizeValue(input.cloudbaseEnv)
   const exchangeUrl = readSsoRedirectUri(input.exchangeUrl)
-  const redirectUri = readSsoRedirectUri(
-    context.platform === 'native' ? input.nativeRedirectUri : input.redirectUri,
-  )
+  const webRedirectUris = readWebRedirectUris(input.redirectUris ?? input.redirectUri)
+  const redirectUri = context.platform === 'native'
+    ? readSsoRedirectUri(input.nativeRedirectUri)
+    : webRedirectUris.find(uri => new URL(uri).origin === context.currentOrigin)
   const scope = readSsoScope(input.scope)
   const ssoOrigin = normalizeHttpsOrigin(input.ssoOrigin)
 
   if (!clientId
     || !CLOUDBASE_ENV_RE.test(cloudbaseEnv)
     || !exchangeUrl
-    || !redirectUri
+    || (context.platform === 'native' ? !redirectUri : webRedirectUris.length === 0)
     || scope.length === 0
     || !ssoOrigin) {
     return {
@@ -61,7 +63,7 @@ export function resolveYunlefunSsoConfig(
     }
   }
 
-  if (context.platform === 'web' && new URL(redirectUri).origin !== context.currentOrigin) {
+  if (!redirectUri) {
     return {
       ok: false,
       message: '当前域名尚未登记为登录回跳地址',
@@ -81,6 +83,18 @@ export function resolveYunlefunSsoConfig(
       },
     },
   }
+}
+
+function readWebRedirectUris(value: string | string[] | undefined): string[] {
+  const candidates = Array.isArray(value)
+    ? value
+    : typeof value === 'string'
+      ? value.split(/[\n,]/)
+      : []
+
+  return [...new Set(candidates
+    .map(candidate => readSsoRedirectUri(candidate.trim()))
+    .filter((candidate): candidate is string => Boolean(candidate)))]
 }
 
 function normalizeHttpsOrigin(value: string | undefined): string {

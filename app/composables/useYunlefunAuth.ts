@@ -24,6 +24,7 @@ interface YunlefunRuntimeConfig {
     yunlefunSsoNativeRedirectUri?: string
     yunlefunSsoOrigin?: string
     yunlefunSsoRedirectUri?: string
+    yunlefunSsoRedirectUris?: string
     yunlefunSsoScope?: string
   }
 }
@@ -110,6 +111,7 @@ async function initializeOnce(
     nativeClientId: runtimeConfig.public.yunlefunSsoNativeClientId,
     nativeRedirectUri: runtimeConfig.public.yunlefunSsoNativeRedirectUri,
     redirectUri: runtimeConfig.public.yunlefunSsoRedirectUri,
+    redirectUris: runtimeConfig.public.yunlefunSsoRedirectUris,
     scope: runtimeConfig.public.yunlefunSsoScope,
     ssoOrigin: runtimeConfig.public.yunlefunSsoOrigin,
   }, {

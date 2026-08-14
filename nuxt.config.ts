@@ -109,6 +109,10 @@ export default defineNuxtConfig({
       yunlefunSsoNativeRedirectUri: process.env.NUXT_PUBLIC_YUNLEFUN_SSO_NATIVE_REDIRECT_URI || 'https://cook.yunyoujun.cn/auth/callback?platform=native',
       yunlefunSsoOrigin: process.env.NUXT_PUBLIC_YUNLEFUN_SSO_ORIGIN || 'https://www.yunle.fun',
       yunlefunSsoRedirectUri: process.env.NUXT_PUBLIC_YUNLEFUN_SSO_REDIRECT_URI || 'https://cook.yunyoujun.cn/auth/callback',
+      yunlefunSsoRedirectUris: process.env.NUXT_PUBLIC_YUNLEFUN_SSO_REDIRECT_URIS || [
+        process.env.NUXT_PUBLIC_YUNLEFUN_SSO_REDIRECT_URI || 'https://cook.yunyoujun.cn/auth/callback',
+        'https://cook.yunle.fun/auth/callback',
+      ].join(','),
       yunlefunSsoScope: process.env.NUXT_PUBLIC_YUNLEFUN_SSO_SCOPE || 'identity:bootstrap',
     },
   },

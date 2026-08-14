@@ -8,6 +8,7 @@ const validConfig = {
   nativeClientId: 'cook-mobile',
   nativeRedirectUri: 'https://cook.yunyoujun.cn/auth/callback?platform=native',
   redirectUri: 'https://cook.yunyoujun.cn/auth/callback',
+  redirectUris: 'https://cook.yunyoujun.cn/auth/callback,https://cook.yunle.fun/auth/callback',
   scope: 'identity:bootstrap',
   ssoOrigin: 'https://www.yunle.fun',
 }
@@ -34,9 +35,34 @@ describe('resolveYunlefunSsoConfig', () => {
     })
   })
 
+  it('selects the registered callback for the current production web origin', () => {
+    expect(resolveYunlefunSsoConfig(validConfig, {
+      currentOrigin: 'https://cook.yunle.fun',
+      platform: 'web',
+    })).toMatchObject({
+      ok: true,
+      config: {
+        redirect: {
+          clientId: 'cook-web',
+          redirectUri: 'https://cook.yunle.fun/auth/callback',
+        },
+      },
+    })
+  })
+
   it('fails closed on an unregistered HTTP development origin', () => {
     expect(resolveYunlefunSsoConfig(validConfig, {
       currentOrigin: 'http://127.0.0.1:4173',
+      platform: 'web',
+    })).toEqual({
+      ok: false,
+      message: '当前域名尚未登记为登录回跳地址',
+    })
+  })
+
+  it('fails closed on an unregistered HTTPS origin', () => {
+    expect(resolveYunlefunSsoConfig(validConfig, {
+      currentOrigin: 'https://cook.example.com',
       platform: 'web',
     })).toEqual({
       ok: false,
