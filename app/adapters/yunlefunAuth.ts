@@ -20,6 +20,10 @@ import {
   startSsoRedirect,
 } from '@yunlefun/sso'
 import {
+  requestHostSsoAuthorization,
+  SsoIdentityAdoptionError,
+} from '@yunlefun/sso/browser'
+import {
   consumeNativeSsoCallback,
   isNativeSsoCallbackUrl,
   openNativeSsoRedirect,
@@ -88,15 +92,47 @@ export interface CloudbaseIdentityDependencies {
   getAuth?: (env: string) => Promise<CloudbaseAuthClient>
 }
 
+export interface WebYunlefunAuthorizationDependencies {
+  requestHostAuthorization?: typeof requestHostSsoAuthorization
+  startRedirect?: typeof startSsoRedirect
+}
+
 let cachedCloudbaseEnv = ''
 let cachedCloudbaseAuth: CloudbaseAuthClient | undefined
 
 export function createWebYunlefunAuthorizationAdapter(
   config: YunlefunSsoConfig,
+  dependencies: WebYunlefunAuthorizationDependencies = {},
 ): YunlefunAuthorizationAdapter {
+  const requestHostAuthorization
+    = dependencies.requestHostAuthorization ?? requestHostSsoAuthorization
+  const startRedirect = dependencies.startRedirect ?? startSsoRedirect
+
   return {
     consumeInitial: async () => consumeSsoRedirect(),
-    start: async () => startSsoRedirect(config.redirect),
+    start: async () => {
+      try {
+        const authorization = await requestHostAuthorization({
+          ...config.redirect,
+          prompt: 'consent',
+        })
+        if (authorization)
+          return authorization
+      }
+      catch (error) {
+        if (error instanceof SsoIdentityAdoptionError
+          && error.reason === 'access_denied') {
+          return {
+            ok: false,
+            reason: 'access_denied',
+          }
+        }
+        throw error
+      }
+
+      await startRedirect(config.redirect)
+      return null
+    },
   }
 }
 
@@ -129,6 +165,7 @@ export function createNativeYunlefunAuthorizationAdapter(
       }, store, async (url) => {
         await Browser.open({ url })
       })
+      return null
     },
   }
 }

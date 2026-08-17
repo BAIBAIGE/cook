@@ -71,6 +71,26 @@ describe('yunlefun auth controller', () => {
     expect(nativeController.snapshot().status).toBe('signing-in')
   })
 
+  it('adopts a host authorization without leaving the current page', async () => {
+    const web = fakeAuthorizationAdapter(null, authorization)
+    const identity = fakeIdentityAdapter()
+    const controller = createYunlefunAuthController({
+      identity,
+      native: fakeAuthorizationAdapter(),
+      platform: 'web',
+      web,
+    })
+
+    await controller.signIn()
+
+    expect(identity.adopted).toEqual([authorization])
+    expect(controller.snapshot()).toEqual({
+      account,
+      errorMessage: '',
+      status: 'signed-in',
+    })
+  })
+
   it('clears both the identity session and public account on sign-out', async () => {
     const identity = fakeIdentityAdapter(account)
     const controller = createYunlefunAuthController({
@@ -133,6 +153,7 @@ describe('yunlefun auth controller', () => {
 
 function fakeAuthorizationAdapter(
   initial: SsoAuthorizationResult | null = null,
+  startedResult: SsoAuthorizationResult | null = null,
 ): YunlefunAuthorizationAdapter & { started: number } {
   return {
     started: 0,
@@ -141,6 +162,7 @@ function fakeAuthorizationAdapter(
     },
     async start() {
       this.started += 1
+      return startedResult
     },
   }
 }

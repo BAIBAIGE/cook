@@ -29,7 +29,7 @@ export type YunlefunAuthorizationResult
 
 export interface YunlefunAuthorizationAdapter {
   consumeInitial: () => Promise<YunlefunAuthorizationResult | null>
-  start: () => Promise<void>
+  start: () => Promise<YunlefunAuthorizationResult | null>
 }
 
 export interface YunlefunIdentityAdapter {
@@ -104,7 +104,9 @@ export function createYunlefunAuthController(
       status: 'signing-in',
     })
     try {
-      await authorization.start()
+      const result = await authorization.start()
+      if (result)
+        await handleAuthorization(result)
     }
     catch {
       update({
